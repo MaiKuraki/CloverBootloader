@@ -1290,10 +1290,10 @@ STATIC LOADER_ENTRY *CreateLoaderEntry(
     Entry->LoaderType = OSTYPE_OTHER;
     break;
   }
-  DBG("OSIconName=%ls \n", OSIconName.wc_str());
+//  DBG("OSIconName=%ls \n", OSIconName.wc_str());
   Entry->OSName = OSIconName.subString(0, OSIconName.indexOf(',')); // TODO
   //  SmbiosList.AddReference(OSName.forgetDataWithoutFreeing(), true);
-DBG("OSName=%ls\n", Entry->OSName.wc_str());
+
   Entry->Title = FullTitle;
   if (Entry->Title.isEmpty() && Volume->VolLabel.notEmpty()) {
     if (Volume->VolLabel[0] == L'#') {
@@ -1337,7 +1337,7 @@ DBG("OSName=%ls\n", Entry->OSName.wc_str());
               : BasenameXW.wc_str());
     }
   }
-  DBG("check Entry->Title \n");
+ // DBG("check Entry->Title \n");
   if (Entry->Title.isEmpty()) {
     //   DBG("encounter LoaderTitle ==%ls and Entry->VolName ==%ls\n",
     //   LoaderTitle.wc_str(), Entry->VolName);
@@ -1503,7 +1503,7 @@ void LOADER_ENTRY::AddDefaultMenu() {
     SubEntry->Title.SWPrintf("Boot %s with selected options", macOS);
     SubScreen->AddMenuEntry(SubEntry, true);
     SubScreen->AddMenuEntry(SubMenuKextInjectMgmt(), true);
-    SubScreen->AddMenuInfo_f("=== boot-args ===");DBG("ADM:10\n");
+    SubScreen->AddMenuInfo_f("=== boot-args ===");
     if (!KernelIs64BitOnly) {
       if (macOSVersion.notEmpty() && macOSVersion < MacOsVersion("10.8"_XS8)) {
         SubScreen->AddMenuCheck("Mac OS X 32bit", OPT_I386, 68);
@@ -2545,9 +2545,10 @@ void ScanLoader(void)
   DBG("Entries list before ordering\n");
   for (size_t idx = 0; idx < MainMenu.Entries.sizeIncludingHidden(); idx++) {
     if (MainMenu.Entries.ElementAt(idx).getLOADER_ENTRY()) {
-      DBG("    Entry %zd : %ls%s\n", idx,
+      DBG("    Entry %zd : %ls%s \n", idx,
           MainMenu.Entries.ElementAt(idx).Title.wc_str(),
-          MainMenu.Entries.ElementAt(idx).Hidden ? " (hidden)" : "");
+          MainMenu.Entries.ElementAt(idx).Hidden ? " (hidden)" : ""
+		  );
     } else {
       DBG("    Entry %zd : %ls%s\n", idx,
           MainMenu.Entries.ElementAt(idx).Title.wc_str(),

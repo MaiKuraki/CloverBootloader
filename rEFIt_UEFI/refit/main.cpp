@@ -1009,7 +1009,8 @@ void LOADER_ENTRY::DelegateKernelPatches() {
   }
 }
 
-void LOADER_ENTRY::StartLoader() {
+void LOADER_ENTRY::StartLoader()
+{
   EFI_STATUS Status;
   EFI_TEXT_STRING ConOutOutputString = 0;
   EFI_HANDLE ImageHandle = NULL;
@@ -1017,7 +1018,6 @@ void LOADER_ENTRY::StartLoader() {
   CONST CHAR8 *InstallerVersion;
 
   DbgHeader("StartLoader");
-
   DBG("Starting %ls\n", FileDevicePathToXStringW(DevicePath).wc_str());
 #ifdef JIEF_DEBUG
   displayFreeMemory("LOADER_ENTRY::StartLoader()"_XS8);
@@ -1077,7 +1077,6 @@ void LOADER_ENTRY::StartLoader() {
 #ifdef JIEF_DEBUG
   displayFreeMemory("LOADER_ENTRY::StartLoader() atfer ThemeX deleted"_XS8);
 #endif
-
   if (OSTYPE_IS_OSX(LoaderType) || OSTYPE_IS_OSX_RECOVERY(LoaderType) ||
       OSTYPE_IS_OSX_INSTALLER(LoaderType)) {
 
@@ -1364,7 +1363,6 @@ void LOADER_ENTRY::StartLoader() {
         gSettings.Quirks.OcKernelQuirks.XhciPortLimit;
     mOpenCoreConfiguration.Kernel.Quirks.ProvideCurrentCpuInfo =
         gSettings.Quirks.OcKernelQuirks.ProvideCurrentCpuInfo;
-
     // Experimental: Auto-detect and apply quirks for modern CPUs
 #ifdef ENABLE_MODERN_CPU_QUIRKS
     if (gSettings.Quirks.OcKernelQuirks.AutoModernCPUQuirks) {
@@ -1981,7 +1979,6 @@ void LOADER_ENTRY::StartLoader() {
       }
       BuildVersion.setEmpty();
     }
-
     if (BuildVersion.notEmpty()) {
       DBG(" %s (%s)\n", macOSVersion.asString().c_str(), BuildVersion.c_str());
     } else {
@@ -2002,10 +1999,7 @@ void LOADER_ENTRY::StartLoader() {
         !BooterPatch((UINT8 *)LoadedImage->ImageBase, LoadedImage->ImageSize)) {
       DBG("Will not patch boot.efi\n");
     }
-XStringW OSName_real = this->OSName;
-//DBG("OS Version=%s\n", macOSVersion.asString().c_str());
-DBG("OSName=%ls\n", OSName_real.wc_str());
-    gConf.ReloadSmbios(OSName_real);
+    gConf.ReloadSmbios(OSName);
     DelegateKernelPatches();
 
     // Set boot argument for kernel if no caches, this should force kernel
@@ -2937,7 +2931,7 @@ static void LoadDrivers(void) {
     gDriversFlags.VideoLoaded = true;
     DriversToConnectNum++;
   }
-DBG("UninitRefitLib Num=%llu\n", DriversToConnectNum);
+//DBG("UninitRefitLib Num=%llu\n", DriversToConnectNum);
   UninitRefitLib();
   if (DriversToConnectNum > 0) {
     DBG("%llu drivers needs connecting ...\n", DriversToConnectNum);
@@ -4012,6 +4006,8 @@ DBG("strlen '<' =%ld or %lld\n", L_STR_LEN("<"), AsciiStrLen("<"));
           HelpRefit();
           break;
       */
+//	LOADER_ENTRY* CE = ChosenEntry->getLOADER_ENTRY();
+
       if (ChosenEntry->getLOADER_ENTRY()) { // Boot OS via .EFI loader
         SetBootCurrent(ChosenEntry->getLOADER_ENTRY());
         ChosenEntry->StartLoader();

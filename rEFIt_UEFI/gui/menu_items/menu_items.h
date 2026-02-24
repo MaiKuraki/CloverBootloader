@@ -104,6 +104,7 @@ class SIDELOAD_KEXT;
 class REFIT_ABSTRACT_MENU_ENTRY {
 public:
   XStringW Title = XStringW();
+  XStringW OSName = XStringW();
   XBool Hidden = false;
   UINTN Row = 0;
   wchar_t ShortcutDigit = 0;
@@ -312,7 +313,7 @@ public:
   XStringW DevicePathString;
   XString8Array LoadOptions; // moved here for compatibility with legacy
   XStringW LoaderPath;
-  XStringW OSName; 
+  //XStringW OSName; // at super
   XIcon DriveImage;
   XIcon BadgeImage;
 
