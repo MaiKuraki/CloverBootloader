@@ -312,6 +312,7 @@ public:
   XStringW DevicePathString;
   XString8Array LoadOptions; // moved here for compatibility with legacy
   XStringW LoaderPath;
+  XStringW OSName; 
   XIcon DriveImage;
   XIcon BadgeImage;
 
@@ -415,7 +416,7 @@ public:
   EFI_GUID APFSTargetUUID;
 
   XStringW DisplayedVolName;
-  XStringW OSName = XStringW();
+//  XStringW OSName; // = XStringW();
   apd<EFI_DEVICE_PATH *> DevicePath;
   UINT16 Flags;
   UINT8 LoaderType;
@@ -425,7 +426,8 @@ public:
 
   UINT8 CustomBoot;
   XImage CustomLogo;
-  KERNEL_AND_KEXT_PATCHES KernelAndKextPatches;
+  //KERNEL_AND_KEXT_PATCHES KernelAndKextPatches;
+  XBool KPDebug = false;
   XStringW Settings;
   UINT8 *KernelData;
   UINT32 AddrVtable;
@@ -472,7 +474,7 @@ public:
       : REFIT_MENU_ITEM_BOOTNUM(), APFSTargetUUID(), DisplayedVolName(),
         DevicePath(0), Flags(0), LoaderType(0), macOSVersion(), BuildVersion(),
         BootBgColor({0, 0, 0, 0}), CustomBoot(0), CustomLogo(),
-        KernelAndKextPatches(), Settings(), KernelData(0), AddrVtable(0),
+        /*KernelAndKextPatches(),*/ Settings(), KernelData(0), AddrVtable(0),
         SizeVtable(0), NamesTable(0), SegVAddr(0), shift(0),
         PatcherInited(false), gSNBEAICPUFixRequire(false),
         gBDWEIOPCIFixRequire(false), isKernelcache(false), is64BitKernel(false),
@@ -500,6 +502,7 @@ public:
   XBool KernelPatchPm();
   XBool KernelLapicPatch_32();
   XBool KernelLapicPatch_64();
+
   XBool BooterPatch(IN UINT8 *BooterData, IN UINT64 BooterSize);
   void EFIAPI KernelBooterExtensionsPatch();
   XBool KernelPanicNoKextDump();
@@ -572,7 +575,7 @@ public:
   void EightApplePatch(UINT8 *Driver, UINT32 DriverSize);
 
   void Stall(int Pause) {
-    if (KernelAndKextPatches.KPDebug) {
+    if (KPDebug) {
       gBS->Stall(Pause);
     }
   };

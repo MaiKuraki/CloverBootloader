@@ -621,40 +621,40 @@ void DumpKernelAndKextPatches(KERNEL_AND_KEXT_PATCHES *Patches) {
 #endif
 void LOADER_ENTRY::FilterKextPatches() {
   if (GlobalConfig.KextPatchesAllowed &&
-      KernelAndKextPatches.KextPatches.size() > 0) {
+      gSettings.KernelAndKextPatches.KextPatches.size() > 0) {
     DBG("Filtering KextPatches:\n");
-    for (size_t i = 0; i < KernelAndKextPatches.KextPatches.size(); i++) {
+    for (size_t i = 0; i < gSettings.KernelAndKextPatches.KextPatches.size(); i++) {
       DBG(" - [%02zu]: %s :: %s :: [OS: %s | MatchOS: %s | MatchBuild: %s]", i,
-          KernelAndKextPatches.KextPatches[i].Label.c_str(),
-          KernelAndKextPatches.KextPatches[i].IsPlistPatch ? "PlistPatch"
+          gSettings.KernelAndKextPatches.KextPatches[i].Label.c_str(),
+          gSettings.KernelAndKextPatches.KextPatches[i].IsPlistPatch ? "PlistPatch"
                                                            : "BinPatch",
           macOSVersion.asString().c_str(),
-          KernelAndKextPatches.KextPatches[i].MatchOS.notEmpty()
-              ? KernelAndKextPatches.KextPatches[i].MatchOS.c_str()
+          gSettings.KernelAndKextPatches.KextPatches[i].MatchOS.notEmpty()
+              ? gSettings.KernelAndKextPatches.KextPatches[i].MatchOS.c_str()
               : "All",
-          KernelAndKextPatches.KextPatches[i].MatchBuild.notEmpty()
-              ? KernelAndKextPatches.KextPatches[i].MatchBuild.c_str()
+          gSettings.KernelAndKextPatches.KextPatches[i].MatchBuild.notEmpty()
+              ? gSettings.KernelAndKextPatches.KextPatches[i].MatchBuild.c_str()
               : "All");
       if (!gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue) {
-        KernelAndKextPatches.KextPatches[i].MenuItem.BValue = false;
+        gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue = false;
         DBG(" ==> disabled by user\n");
         continue;
       }
-      KernelAndKextPatches.KextPatches[i].MenuItem.BValue = true;
+      gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue = true;
       if ((BuildVersion.notEmpty()) &&
-          (KernelAndKextPatches.KextPatches[i].MatchBuild.notEmpty())) {
-        KernelAndKextPatches.KextPatches[i].MenuItem.BValue =
-            KernelAndKextPatches.KextPatches[i].IsPatchEnabledByBuildNumber(
+          (gSettings.KernelAndKextPatches.KextPatches[i].MatchBuild.notEmpty())) {
+        gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue =
+            gSettings.KernelAndKextPatches.KextPatches[i].IsPatchEnabledByBuildNumber(
                 BuildVersion);
-        DBG(" ==> %s\n", KernelAndKextPatches.KextPatches[i].MenuItem.BValue
+        DBG(" ==> %s\n", gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue
                              ? "allowed"
                              : "not allowed");
         continue;
       }
 
-      KernelAndKextPatches.KextPatches[i].MenuItem.BValue =
-          KernelAndKextPatches.KextPatches[i].IsPatchEnabled(macOSVersion);
-      DBG(" ==> %s\n", KernelAndKextPatches.KextPatches[i].MenuItem.BValue
+      gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue =
+          gSettings.KernelAndKextPatches.KextPatches[i].IsPatchEnabled(macOSVersion);
+      DBG(" ==> %s\n", gSettings.KernelAndKextPatches.KextPatches[i].MenuItem.BValue
                            ? "allowed"
                            : "not allowed");
     }
@@ -663,40 +663,40 @@ void LOADER_ENTRY::FilterKextPatches() {
 
 void LOADER_ENTRY::FilterKernelPatches() {
   if (GlobalConfig.KernelPatchesAllowed &&
-      KernelAndKextPatches.KernelPatches.notEmpty()) {
+      gSettings.KernelAndKextPatches.KernelPatches.notEmpty()) {
     DBG("Filtering KernelPatches:\n");
-    for (size_t i = 0; i < KernelAndKextPatches.KernelPatches.size(); ++i) {
+    for (size_t i = 0; i < gSettings.KernelAndKextPatches.KernelPatches.size(); ++i) {
       DBG(" - [%02zu]: %s :: [OS: %s | MatchOS: %s | MatchBuild: %s]", i,
-          KernelAndKextPatches.KernelPatches[i].Label.c_str(),
+          gSettings.KernelAndKextPatches.KernelPatches[i].Label.c_str(),
           macOSVersion.asString().c_str(),
-          KernelAndKextPatches.KernelPatches[i].MatchOS.notEmpty()
-              ? KernelAndKextPatches.KernelPatches[i].MatchOS.c_str()
+          gSettings.KernelAndKextPatches.KernelPatches[i].MatchOS.notEmpty()
+              ? gSettings.KernelAndKextPatches.KernelPatches[i].MatchOS.c_str()
               : "All",
-          KernelAndKextPatches.KernelPatches[i].MatchBuild.notEmpty()
-              ? KernelAndKextPatches.KernelPatches[i].MatchBuild.c_str()
+          gSettings.KernelAndKextPatches.KernelPatches[i].MatchBuild.notEmpty()
+              ? gSettings.KernelAndKextPatches.KernelPatches[i].MatchBuild.c_str()
               : "All");
       if (!gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue) {
-        KernelAndKextPatches.KernelPatches[i].MenuItem.BValue = false;
+        gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue = false;
         DBG(" ==> disabled by user\n");
         continue;
       }
-      KernelAndKextPatches.KernelPatches[i].MenuItem.BValue = true;
+      gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue = true;
       if ((BuildVersion.notEmpty()) &&
-          (KernelAndKextPatches.KernelPatches[i].MatchBuild.notEmpty())) {
-        KernelAndKextPatches.KernelPatches[i].MenuItem.BValue =
-            KernelAndKextPatches.KernelPatches[i].IsPatchEnabledByBuildNumber(
+          (gSettings.KernelAndKextPatches.KernelPatches[i].MatchBuild.notEmpty())) {
+        gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue =
+            gSettings.KernelAndKextPatches.KernelPatches[i].IsPatchEnabledByBuildNumber(
                 BuildVersion);
         DBG(" ==> %s by build\n",
-            KernelAndKextPatches.KernelPatches[i].MenuItem.BValue
+            gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue
                 ? "allowed"
                 : "not allowed");
         continue;
       }
 
-      KernelAndKextPatches.KernelPatches[i].MenuItem.BValue =
-          KernelAndKextPatches.KernelPatches[i].IsPatchEnabled(macOSVersion);
+      gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue =
+          gSettings.KernelAndKextPatches.KernelPatches[i].IsPatchEnabled(macOSVersion);
       DBG(" ==> %s by OS\n",
-          KernelAndKextPatches.KernelPatches[i].MenuItem.BValue
+          gSettings.KernelAndKextPatches.KernelPatches[i].MenuItem.BValue
               ? "allowed"
               : "not allowed");
     }
@@ -704,38 +704,38 @@ void LOADER_ENTRY::FilterKernelPatches() {
 }
 
 void LOADER_ENTRY::FilterBootPatches() {
-  if (KernelAndKextPatches.BootPatches.notEmpty()) {
+  if (gSettings.KernelAndKextPatches.BootPatches.notEmpty()) {
     DBG("Filtering BootPatches:\n");
-    for (size_t i = 0; i < KernelAndKextPatches.BootPatches.size(); ++i) {
+    for (size_t i = 0; i < gSettings.KernelAndKextPatches.BootPatches.size(); ++i) {
       DBG(" - [%02zu]: %s :: [OS: %s | MatchOS: %s | MatchBuild: %s]", i,
-          KernelAndKextPatches.BootPatches[i].Label.c_str(),
+          gSettings.KernelAndKextPatches.BootPatches[i].Label.c_str(),
           macOSVersion.asString().c_str(),
-          KernelAndKextPatches.BootPatches[i].MatchOS.notEmpty()
-              ? KernelAndKextPatches.BootPatches[i].MatchOS.c_str()
+          gSettings.KernelAndKextPatches.BootPatches[i].MatchOS.notEmpty()
+              ? gSettings.KernelAndKextPatches.BootPatches[i].MatchOS.c_str()
               : "All",
-          KernelAndKextPatches.BootPatches[i].MatchBuild.notEmpty()
-              ? KernelAndKextPatches.BootPatches[i].MatchBuild.c_str()
+          gSettings.KernelAndKextPatches.BootPatches[i].MatchBuild.notEmpty()
+              ? gSettings.KernelAndKextPatches.BootPatches[i].MatchBuild.c_str()
               : "All");
       if (!gSettings.KernelAndKextPatches.BootPatches[i].MenuItem.BValue) {
         DBG(" ==> disabled by user\n");
         continue;
       }
-      KernelAndKextPatches.BootPatches[i].MenuItem.BValue = true;
+      gSettings.KernelAndKextPatches.BootPatches[i].MenuItem.BValue = true;
       if ((BuildVersion.notEmpty()) &&
-          (KernelAndKextPatches.BootPatches[i].MatchBuild.notEmpty())) {
-        KernelAndKextPatches.BootPatches[i].MenuItem.BValue =
-            KernelAndKextPatches.BootPatches[i].IsPatchEnabledByBuildNumber(
+          (gSettings.KernelAndKextPatches.BootPatches[i].MatchBuild.notEmpty())) {
+        gSettings.KernelAndKextPatches.BootPatches[i].MenuItem.BValue =
+            gSettings.KernelAndKextPatches.BootPatches[i].IsPatchEnabledByBuildNumber(
                 BuildVersion);
         DBG(" ==> %s by build\n",
-            KernelAndKextPatches.BootPatches[i].MenuItem.BValue
+            gSettings.KernelAndKextPatches.BootPatches[i].MenuItem.BValue
                 ? "allowed"
                 : "not allowed");
         continue;
       }
 
-      KernelAndKextPatches.BootPatches[i].MenuItem.BValue =
-          KernelAndKextPatches.BootPatches[i].IsPatchEnabled(macOSVersion);
-      DBG(" ==> %s by OS\n", KernelAndKextPatches.BootPatches[i].MenuItem.BValue
+      gSettings.KernelAndKextPatches.BootPatches[i].MenuItem.BValue =
+          gSettings.KernelAndKextPatches.BootPatches[i].IsPatchEnabled(macOSVersion);
+      DBG(" ==> %s by OS\n", gSettings.KernelAndKextPatches.BootPatches[i].MenuItem.BValue
                                  ? "allowed"
                                  : "not allowed");
     }
@@ -743,18 +743,18 @@ void LOADER_ENTRY::FilterBootPatches() {
 }
 
 void LOADER_ENTRY::FilterKextsToBlock() {
-  if (KernelAndKextPatches.KextsToBlock.isEmpty()) {
+  if (gSettings.KernelAndKextPatches.KextsToBlock.isEmpty()) {
     return;
   }
 
-  size_t settingsCount = gSettings.KernelAndKextPatches.KextsToBlock.size();
-  size_t entryCount = KernelAndKextPatches.KextsToBlock.size();
-  size_t count = (settingsCount < entryCount) ? settingsCount : entryCount;
-
-  for (size_t i = 0; i < count; ++i) {
-    KernelAndKextPatches.KextsToBlock[i].MenuItem.BValue =
-        gSettings.KernelAndKextPatches.KextsToBlock[i].MenuItem.BValue;
-  }
+//  size_t count = gSettings.KernelAndKextPatches.KextsToBlock.size();
+////  size_t entryCount = KernelAndKextPatches.KextsToBlock.size();
+////  size_t count = (settingsCount < entryCount) ? settingsCount : entryCount;
+//
+//  for (size_t i = 0; i < count; ++i) {
+//    gSettings.KernelAndKextPatches.KextsToBlock[i].MenuItem.BValue =
+//        gSettings.KernelAndKextPatches.KextsToBlock[i].MenuItem.BValue;
+//  }
 }
 
 //
@@ -920,17 +920,17 @@ void debugStartImageWithOC() {
 void LOADER_ENTRY::DelegateKernelPatches() {
   XObjArray<ABSTRACT_KEXT_OR_KERNEL_PATCH> selectedPathArray;
   for (size_t kernelPatchIdx = 0;
-       kernelPatchIdx < KernelAndKextPatches.KernelPatches.size();
+       kernelPatchIdx < gSettings.KernelAndKextPatches.KernelPatches.size();
        kernelPatchIdx++) {
-    if (KernelAndKextPatches.KernelPatches[kernelPatchIdx].MenuItem.BValue)
+    if (gSettings.KernelAndKextPatches.KernelPatches[kernelPatchIdx].MenuItem.BValue)
       selectedPathArray.AddReference(
-          &KernelAndKextPatches.KernelPatches[kernelPatchIdx], false);
+          &gSettings.KernelAndKextPatches.KernelPatches[kernelPatchIdx], false);
   }
   for (size_t kextPatchIdx = 0;
-       kextPatchIdx < KernelAndKextPatches.KextPatches.size(); kextPatchIdx++) {
-    if (KernelAndKextPatches.KextPatches[kextPatchIdx].MenuItem.BValue)
+       kextPatchIdx < gSettings.KernelAndKextPatches.KextPatches.size(); kextPatchIdx++) {
+    if (gSettings.KernelAndKextPatches.KextPatches[kextPatchIdx].MenuItem.BValue)
       selectedPathArray.AddReference(
-          &KernelAndKextPatches.KextPatches[kextPatchIdx], false);
+          &gSettings.KernelAndKextPatches.KextPatches[kextPatchIdx], false);
   }
   mOpenCoreConfiguration.Kernel.Patch.Count = (UINT32)selectedPathArray.size();
   mOpenCoreConfiguration.Kernel.Patch.AllocCount =
@@ -1599,7 +1599,7 @@ void LOADER_ENTRY::StartLoader() {
     } // for (size_t kextIdx
 
     mOpenCoreConfiguration.Kernel.Force.Count =
-        (UINT32)KernelAndKextPatches.ForceKextsToLoad.size();
+        (UINT32)gSettings.KernelAndKextPatches.ForceKextsToLoad.size();
 //DBG("Force.count=%u\n", mOpenCoreConfiguration.Kernel.Force.Count);
     mOpenCoreConfiguration.Kernel.Force.AllocCount =
         mOpenCoreConfiguration.Kernel.Force.Count;
@@ -1615,9 +1615,9 @@ void LOADER_ENTRY::StartLoader() {
  //   memset(mOpenCoreConfiguration.Kernel.Force.Values, 0, valuesSize);
 
     for (size_t kextIdx = 0;
-         kextIdx < KernelAndKextPatches.ForceKextsToLoad.size(); kextIdx++) {
+         kextIdx < gSettings.KernelAndKextPatches.ForceKextsToLoad.size(); kextIdx++) {
       const XStringW &forceKext =
-          KernelAndKextPatches.ForceKextsToLoad[kextIdx];
+          gSettings.KernelAndKextPatches.ForceKextsToLoad[kextIdx];
 
       DBG("Force kext to OC : Path=%ls\n", forceKext.wc_str());
       mOpenCoreConfiguration.Kernel.Force.Values[kextIdx] =
@@ -1718,8 +1718,8 @@ void LOADER_ENTRY::StartLoader() {
     FilterKextsToBlock();
     size_t blockCount = 0;
     for (size_t blockIdx = 0;
-         blockIdx < KernelAndKextPatches.KextsToBlock.size(); blockIdx++) {
-      if (KernelAndKextPatches.KextsToBlock[blockIdx].ShouldBlock(macOSVersion)) {
+         blockIdx < gSettings.KernelAndKextPatches.KextsToBlock.size(); blockIdx++) {
+      if (gSettings.KernelAndKextPatches.KextsToBlock[blockIdx].ShouldBlock(macOSVersion)) {
         blockCount++;
       }
     }
@@ -1739,8 +1739,8 @@ void LOADER_ENTRY::StartLoader() {
 
       size_t blockValueIdx = 0;
       for (size_t blockIdx = 0;
-           blockIdx < KernelAndKextPatches.KextsToBlock.size(); blockIdx++) {
-        const auto& blockEntry = KernelAndKextPatches.KextsToBlock[blockIdx];
+           blockIdx < gSettings.KernelAndKextPatches.KextsToBlock.size(); blockIdx++) {
+        const auto& blockEntry = gSettings.KernelAndKextPatches.KextsToBlock[blockIdx];
         if (!blockEntry.ShouldBlock(macOSVersion)) {
           continue;
         }
@@ -2000,7 +2000,10 @@ void LOADER_ENTRY::StartLoader() {
         !BooterPatch((UINT8 *)LoadedImage->ImageBase, LoadedImage->ImageSize)) {
       DBG("Will not patch boot.efi\n");
     }
-    gConf.ReloadSmbios(OSName);
+XStringW OSName_real = this->OSName;
+//DBG("OS Version=%s\n", macOSVersion.asString().c_str());
+DBG("OSName=%ls\n", OSName_real.wc_str());
+    gConf.ReloadSmbios(OSName_real);
     DelegateKernelPatches();
 
     // Set boot argument for kernel if no caches, this should force kernel
@@ -2071,7 +2074,7 @@ void LOADER_ENTRY::StartLoader() {
      * syscl - append "-xcpm" argument conditionally if set KernelXCPM on Intel
      * Haswell+ low-end CPUs
      */
-    if (KernelAndKextPatches.KPKernelXCPM &&
+    if (gSettings.KernelAndKextPatches.KPKernelXCPM &&
         gCPUStructure.Vendor == CPU_VENDOR_INTEL &&
         gCPUStructure.Model >= CPU_MODEL_HASWELL &&
         (gCPUStructure.BrandString.contains("Celeron") ||
@@ -2085,7 +2088,7 @@ void LOADER_ENTRY::StartLoader() {
 
     // add -xcpm on Ivy Bridge if set KernelXCPM and system version is 10.8.5
     // - 10.11.x
-    if (KernelAndKextPatches.KPKernelXCPM &&
+    if (gSettings.KernelAndKextPatches.KPKernelXCPM &&
         gCPUStructure.Model == CPU_MODEL_IVY_BRIDGE &&
         macOSVersion >= MacOsVersion("10.8.5"_XS8) &&
         macOSVersion < MacOsVersion("10.12"_XS8) &&
@@ -2932,7 +2935,7 @@ static void LoadDrivers(void) {
     gDriversFlags.VideoLoaded = true;
     DriversToConnectNum++;
   }
-
+DBG("UninitRefitLib Num=%llu\n", DriversToConnectNum);
   UninitRefitLib();
   if (DriversToConnectNum > 0) {
     DBG("%llu drivers needs connecting ...\n", DriversToConnectNum);

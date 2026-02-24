@@ -599,6 +599,8 @@ EFI_STATUS ConfigManager::LoadSMBIOSPlist(const XStringW& ConfName)
 void ConfigManager::ReloadSmbios(XStringW& str)  // searches for SMBIOS by system name
 {
   size_t N = SmbiosList.size();
+DBG("search SMBIOS for %ls\n", str.wc_str());
+DBG("at Reload OldChosenSmbios =%lld list size=%zu\n", OldChosenSmbios, N);
   if (OldChosenSmbios == 0) {  // this is auto fill by OSName
     for (size_t i=1; i<N; i++) {
       if (SmbiosList[i].contains(str)) {
